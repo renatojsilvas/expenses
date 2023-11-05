@@ -1,11 +1,42 @@
 version: '3.9'
 
 services:
-  api:
+  api-1:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "3000:80"
+    hostname: api-1
+    expose:
+      - "80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - expenses
+
+  api-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: api-2
+    expose:
+      - "80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - expenses
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "9999:80"
+    depends_on:
+      - api-1
+      - api-2
+    networks:
+      - expenses
+
+networks:
+  expenses:
+    driver: bridge

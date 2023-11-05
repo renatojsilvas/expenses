@@ -18,15 +18,16 @@ public class WeatherForecastController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    private static Guid? Id = null;
+
+    [HttpGet(Name = "GetId")]
+    public string GetId()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        if (Id is null)
         {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+            Id = Guid.NewGuid();
+        }
+
+        return Id.ToString();
     }
 }
