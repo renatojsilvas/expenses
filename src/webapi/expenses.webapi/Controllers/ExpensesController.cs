@@ -1,3 +1,4 @@
+using Expenses.Webapi.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace expenses.webapi.Controllers;
@@ -6,16 +7,11 @@ namespace expenses.webapi.Controllers;
 [Route("[controller]")]
 public class ExpensesController : ControllerBase
 {
-    private static Guid? Id = null;
-
-    [HttpGet]
-    public string GetId()
+    [HttpPost]
+    public async Task<IActionResult> AddExpense([FromBody] NewExpenseInput newExpenseInput)
     {
-        if (Id is null)
-        {
-            Id = Guid.NewGuid();
-        }
+		await Task.Delay(1);
 
-        return $"Teste {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")} {Id}";
+        return Ok();
     }
 }
